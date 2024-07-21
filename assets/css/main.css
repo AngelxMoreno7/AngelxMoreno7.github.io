@@ -2414,6 +2414,26 @@ input, select, textarea {
 				width: 100%;
 			}
 
+/* Video */ 
+
+	.video {
+		border-radius: 8px;
+		border: 0;
+		display: inline-block;
+		position: relative;
+	}
+		.video img {
+			border-radius: 8px;
+			display: block;
+		}
+		.video.main {
+			display: block;
+			margin: 0 0 3em 0;
+			width: 100%;
+		}
+			.video.main img {
+				width: 100%;
+			}
 /* List */
 
 	ol {
