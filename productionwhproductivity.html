@@ -38,7 +38,9 @@
                                 <p>To build the dashboard, I used R Studio to draft my first Shiny App. The dashboard contains 3 separate plots: Daily Production, Quantity Produced vs Quantity Shipped, and Inventory History. Using reactive objects, I utilized dropdown menus and date ranges for user navigation throughout the dashboard. At the very top, the user selects the specific part number they would like to see which will automatically change all three plots to reflect that part number. Once that is done, the user is able to filter the data using date ranges. </p>
 								<p>Our organization has a central database and uses MSSQL to interact with it. Therefore on the backend I set up a connection between MSSQL and my R application through Open Database Connectivity (ODBC) within the R app. That way, I’m able to I’m able to develop the front-end and call the SQL queries all within the same R script.  </p>
                                 <h3> Solution </h3>
-                                <span class = "video main"> <img src="images/dashboard video.MP4" alt=""/> </span>
+                                <span class = "video main"> <video width="320" height="240" controls>
+									<source src="images/dashboard_video.MP4" type="video/mp4">
+								</video> </span>
                                 <p>For privacy reasons, I’ve changed the actual part numbers and client names to generic names such as “PN 1”, “PN 2”, etc. The final product contains the three sections below one-another with each having their own filters where applicable. For visibility sake I’ve added some extra information such as a side-widget presenting the sum of the 1st plot’s metrics and displaying the exact value of each bar within the second plot. </p>
                                 <span class = "image right"> <img src="images/gsa dashboard plot 1 - sum.png" alt=""/> </span>
                                 <span class = "image left"> <img src="images/gsa dashboard plot 2 - bar value.png" alt=""/> </span>
