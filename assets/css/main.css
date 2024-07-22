@@ -2362,6 +2362,17 @@ input, select, textarea {
 
 /* Image */
 
+	.image-container {
+		display: flex;
+		justify-content: space-between;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 100%;
+		font: inherit;
+		vertical-align: baseline;
+	}
+
 	.image {
 		border-radius: 8px;
 		border: 0;
@@ -2413,7 +2424,16 @@ input, select, textarea {
 			.image.main img {
 				width: 100%;
 			}
-
+	.text-container {
+		clear:both;
+		margin-top: 20px;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 100%;
+		font: inherit;
+		vertical-align: baseline;
+	}
 /* Video */ 
 
 	.video {
