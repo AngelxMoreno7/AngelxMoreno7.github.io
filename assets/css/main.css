@@ -2387,22 +2387,30 @@ input, select, textarea {
 
 		.image.left, .image.right {
 			max-width: 40%;
+			width: 16em;
+			height: 16em;
 		}
 
 			.image.left img, .image.right img {
 				width: 100%;
+				width: 16em;
+				height: 16em;
 			}
 
 		.image.left {
 			float: left;
 			margin: 0 1.5em 1em 0;
 			top: 0.25em;
+			width: 16em;
+			height: 16em;
 		}
 
 		.image.right {
 			float: right;
 			margin: 0 0 1em 1.5em;
 			top: 0.25em;
+			width: 16em;
+			height: 16em;
 		}
 
 		.image.fit {
