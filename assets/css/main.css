@@ -2401,8 +2401,29 @@ input, select, textarea {
 				width: 16em;
 				height: 16m;
 			}
+			.image.left-bordered img, .image.right-bordered img {
+				width: 100%;
+				width: 16em;
+				height: 16m;
+			}
 
-		.image.left {
+			.image.left {
+				float: left;
+				margin: 0 7.7em 1em 0;
+				top: 0.25em;
+				width: 16em;
+				height: 16em;
+			}
+
+			.image.right {
+				float: right;
+				margin: 0 0 1em 7.7em;
+				top: 0.25em;
+				width: 16em;
+				height: 16em;
+			}
+
+		.image.left-bordered {
 			float: left;
 			margin: 0 7.7em 1em 0;
 			top: 0.25em;
@@ -2411,7 +2432,7 @@ input, select, textarea {
 			border: 2px solid #000; /* Add border properties here */
 		}
 
-		.image.right {
+		.image.right-bordered {
 			float: right;
 			margin: 0 0 1em 7.7em;
 			top: 0.25em;
