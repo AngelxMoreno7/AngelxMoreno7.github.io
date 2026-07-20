@@ -551,7 +551,7 @@
 
     <script>
         // Project configuration - easily add, remove, or update projects here
-        const projects = [
+        const projectsUnsorted = [
           {
             id: 1,
             title: "Lead Quality Scoring Model",
@@ -559,6 +559,7 @@
             image: "images/lead_grading_meeting_booking_rate_year_over_year.png",
             tags: ["XGBoost", "Python", "Azure ML Studio", "Feature Engineering", "Salesforce"],
             link: "lead-grading-model.html",
+            date: "1/1/26",
             metrics: {
               metric: "YoY Improvement",
               value: "50-100%"
@@ -571,6 +572,7 @@
             image: "images/TRAINING VALIDATION EMNIST.png",
             tags: ["Python", "TensorFlow", "Deep Learning", "CNN"],
             link: "https://angelxmoreno7.github.io/EmnistConvNN",
+            date: "5/12/23",
             metrics: {
               metric: "Accuracy",
               value: "97%+"
@@ -583,6 +585,7 @@
             image: "images/PRINCIPLE COMPONENT ANALYSIS GRAPHIC.png",
             tags: ["Python", "Scikit-learn", "ML Models", "PCA"],
             link: "https://angelxmoreno7.github.io/fashion-mnist",
+            date: "12/21/21",
             metrics: {
               metric: "Models Built",
               value: "5+"
@@ -595,12 +598,21 @@
             image: "images/FANTASY RBS BAR GRAPH.png",
             tags: ["Data Analysis", "Python", "Sports Analytics", "Visualization"],
             link: "https://angelxmoreno7.github.io/fantasyrbanalysis",
+            date: "10/06/22",
             metrics: {
               metric: "Years Analyzed",
               value: "10+"
             }
           }
         ];
+
+        // Sort projects by date (newest first)
+        function parseDate(dateStr) {
+            const [month, day, year] = dateStr.split('/');
+            return new Date(year, month - 1, day);
+        }
+
+        const projects = projectsUnsorted.sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
         // Render projects from configuration
         function renderProjects() {
@@ -611,6 +623,7 @@
                         <img src="${project.image}" alt="${project.title}">
                     </div>
                     <div class="project-content">
+                        <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.5rem;">${project.date}</p>
                         <div class="project-header">
                             <h3>${project.title}</h3>
                             <div class="project-metric">
