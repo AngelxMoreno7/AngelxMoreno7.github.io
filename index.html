@@ -217,12 +217,17 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            cursor: pointer;
         }
 
         .project-card:hover {
             border-color: rgba(59, 130, 246, 0.5);
             transform: translateY(-8px);
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+        }
+
+        .project-card a {
+            pointer-events: none;
         }
 
         .project-image {
@@ -601,7 +606,7 @@
         function renderProjects() {
             const container = document.getElementById('projectsContainer');
             container.innerHTML = projects.map(project => `
-                <div class="project-card">
+                <div class="project-card" onclick="window.location.href='${project.link}';">
                     <div class="project-image">
                         <img src="${project.image}" alt="${project.title}">
                     </div>
@@ -617,7 +622,7 @@
                         <div class="project-tags">
                             ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                         </div>
-                        <a href="${project.link}" target="_blank" class="project-link">
+                        <a href="${project.link}" class="project-link">
                             View Project <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
