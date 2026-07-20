@@ -1,82 +1,302 @@
-<!DOCTYPE HTML>
-<!--
-	Stellar by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Fashion MNIST</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion MNIST - Supervised & Unsupervised Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1e40af;
+            --slate-dark: #0f172a;
+            --slate-light: #1e293b;
+            --slate-lighter: #334155;
+        }
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-				<!-- Header -->
-					<header id="header">
-						<h1>Statistical Modeling</h1>
-					</header>
+        html {
+            scroll-behavior: smooth;
+        }
 
-				<!-- Main -->
-					<div id="main">
+        body {
+            background: linear-gradient(135deg, var(--slate-dark) 0%, #1a2f4d 100%);
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
 
-						<!-- Content -->
-							<section id="content" class="main">
-								<span class="image main"><img src="images/fashion-mnist header.png" alt="" /></span>
-								<p>Date: 12/21/21</p>
-                                <h1>Statistical Modeling on Fashion MNIST Dataset</h1>
-                                <h3>Introduction</h3>
-								<p>This project served as my introduction to the use of models such as logistic regression, principle component analysis, and kNN. While this project shows only a basic understanding of these models, I decided to showcase this project because it shows my understanding of the MATH behind the algorithms. This is usually overlooked, but understanding the mathematical concepts is critical if you’re ever going to work on making your own models. </p>
-                                <span class = "image right"> <img src="images/fashion-msnist-examples.png" alt=""/> </span>
-                                <h3>The Dataset</h3>
-                                <p>The fashion MNIST dataset contains grey-scale, low-resolution images articles of clothing that fit within 10 categories. Some examples are shown to the right. In this form it’s easy for us to see, but on the backend the images are structured in a way where each pixel within the image is represented as a digit between 0 and 255. The lower the digit, the more black that pixel is and vice versa. </p>
-                                <h3>Preparation</h3>
-                                <p>Normally it would be necessary to split our data into training and test datasets. However, there’s no need in this case as the training and test datasets are already separated into their own .csv files. Therefore the only data prep required here was to transform the samples into ndarray objects.</p>                                
-                                <h3>Logistic Regression</h3>
-                                <p>For this multi-class classification scenario, I built a logistic regression model from scratch. To do this, I defined a function that contains for-loops required to run iterations for training the model, the loss function, the gradient descent algorithm, and the softmax function the acquires the probabilities required to select a class for each image. </p>
-                                <span class = "image right"> <img src="images/PRINCIPLE COMPONENT ANALYSIS GRAPHIC.png" alt=""/> </span>
-                                <h3>Principle Component Analysis (PCA)</h3>
-                                <p>As mentioned before, each pixel of each image is represented as a number between 0 and 255. In this case with 60,000  (28 x 28) images, we have a total of 47,040,000 numbers! In order to train our models, each digit is used in a computation when computing the model’s optimal weights, the “learning” in machine learning. Now, real-world applications require larger, higher-resolution images, which can be understood as even more numbers. As you can guess, this is a slippery slope that eventually requires super-computers.</p>
-                                <p>How to combat this? Lower the number of digits per image. In this model, I reduce each image from 784 digits to just 2. Of course going from 784 digits per image to just 2 will result in lots of lost information, but you’ll be surprised how effective this model still is. </p>
-                                <p>Here you see a plot containing all of our 60,000 images. Since each image has been reduced to 2 numbers, we can now plot them all on an x-y plot! The color of each point represents that image’s class. Despite only being identified by 2 digits, you can see that the model was quite effective at grouping together images of certain classes. Of course we’d both agree that reducing our images to 2 digits was overkill, but I used 2 digits so that the model’s purpose can be visualized. I’m still impressed by how effective this model still is despite reducing the dimensions so much. </p>
-                                <h1>Using Model Packages</h1>
-                                <h3>Introduction</h3>
-                                <p>Now, it’s not always necessary to reinvent the wheel. Rather than building models from scratch, it makes much more sense to use already-made packages as this will save time and probably perform better. Below I’ll be running two classification models through the sci-kit learn package. In interest of adding value rather than just showing I can use a package, I also go over the main mathematical function at work</p>
-                                <h3>kNN</h3>
-                                <p>As you can see below, the ski-kit learn package allows us to achieve better results in just 3 lines of code. First we set an instance of the function, then we fit, then we get the accuracy of our model. This is already a 3% improvement from our model. </p>
-                                <span class = "image main"> <img src="images/kNN code.png" alt=""/> </span>
-                                <p>The concept behind kNN is this: depending on the value of k, the model will select the k most similar samples to the sample being classified. Based on the k samples selected, the classification will be based on whichever class has the highest proportion out of the k samples. In the equation below, the function is calculating the probability that sample y belongs to class j. On the right side, it’s taking the sum of instances of class j among the k samples and calculating the proportion of the k samples. This is done for each class j and the class with the max proportion is the class that the model selects. </p>
-                                <span class = "image main"> <img src="images/kNN equation.png" alt=""/> </span>
-							</section>
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            z-index: 50;
+            padding: 1rem 2rem;
+        }
 
-					</div>
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 6xl;
+            margin: 0 auto;
+        }
 
-				<!-- Footer -->
-				<footer id="footer">
-					<section>
-						<ul class="icons">
-							<li><a href="https://www.linkedin.com/in/miguelangelmoreno7/" target="_blank" class="icon brands fa-linkedin alt"><span class="label">Twitter</span></a></li>
-							<li><a href="https://github.com/angelxmoreno7" target="_blank" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
-						</ul>
-					</section>
-					<p class="copyright">&copy; Angel Moreno 2024</p>
-				</footer>
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
 
-			</div>
+        header a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+        header a:hover {
+            color: var(--primary);
+        }
 
-	</body>
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .project-header {
+            margin-bottom: 3rem;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-date {
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .main-image {
+            width: 100%;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .project-content {
+            line-height: 1.8;
+        }
+
+        .project-content h1,
+        .project-content h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .project-content h1:first-of-type,
+        .project-content h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .project-content p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .content-image {
+            width: 100%;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .content-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-right {
+            float: right;
+            max-width: 45%;
+            margin: 0 0 1.5rem 1.5rem;
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .image-right {
+                float: none;
+                max-width: 100%;
+                margin: 1rem 0;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Angel Moreno</a>
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+        <div class="project-header">
+            <p class="project-date">Date: 12/21/21</p>
+            <h1>Statistical Modeling on Fashion MNIST Dataset</h1>
+        </div>
+
+        <div class="main-image">
+            <img src="images/fashion-mnist header.png" alt="Fashion MNIST header">
+        </div>
+
+        <div class="project-content">
+            <h3>Introduction</h3>
+            <p>This project served as my introduction to the use of models such as logistic regression, principle component analysis, and kNN. While this project shows only a basic understanding of these models, I decided to showcase this project because it shows my understanding of the MATH behind the algorithms. This is usually overlooked, but understanding the mathematical concepts is critical if you're ever going to work on making your own models.</p>
+
+            <div style="overflow: auto;">
+                <div class="content-image image-right">
+                    <img src="images/fashion-msnist-examples.png" alt="Fashion MNIST examples">
+                </div>
+                <h3>The Dataset</h3>
+                <p>The fashion MNIST dataset contains grey-scale, low-resolution images articles of clothing that fit within 10 categories. Some examples are shown to the right. In this form it's easy for us to see, but on the backend the images are structured in a way where each pixel within the image is represented as a digit between 0 and 255. The lower the digit, the more black that pixel is and vice versa.</p>
+            </div>
+
+            <h3>Preparation</h3>
+            <p>Normally it would be necessary to split our data into training and test datasets. However, there's no need in this case as the training and test datasets are already separated into their own .csv files. Therefore the only data prep required here was to transform the samples into ndarray objects.</p>
+
+            <h3>Logistic Regression</h3>
+            <p>For this multi-class classification scenario, I built a logistic regression model from scratch. To do this, I defined a function that contains for-loops required to run iterations for training the model, the loss function, the gradient descent algorithm, and the softmax function the acquires the probabilities required to select a class for each image.</p>
+
+            <div style="overflow: auto;">
+                <div class="content-image image-right">
+                    <img src="images/PRINCIPLE COMPONENT ANALYSIS GRAPHIC.png" alt="PCA visualization">
+                </div>
+                <h3>Principle Component Analysis (PCA)</h3>
+                <p>As mentioned before, each pixel of each image is represented as a number between 0 and 255. In this case with 60,000 (28 x 28) images, we have a total of 47,040,000 numbers! In order to train our models, each digit is used in a computation when computing the model's optimal weights, the "learning" in machine learning. Now, real-world applications require larger, higher-resolution images, which can be understood as even more numbers. As you can guess, this is a slippery slope that eventually requires super-computers.</p>
+                <p>How to combat this? Lower the number of digits per image. In this model, I reduce each image from 784 digits to just 2. Of course going from 784 digits per image to just 2 will result in lots of lost information, but you'll be surprised how effective this model still is.</p>
+                <p>Here you see a plot containing all of our 60,000 images. Since each image has been reduced to 2 numbers, we can now plot them all on an x-y plot! The color of each point represents that image's class. Despite only being identified by 2 digits, you can see that the model was quite effective at grouping together images of certain classes. Of course we'd both agree that reducing our images to 2 digits was overkill, but I used 2 digits so that the model's purpose can be visualized. I'm still impressed by how effective this model still is despite reducing the dimensions so much.</p>
+            </div>
+
+            <h1>Using Model Packages</h1>
+            <h3>Introduction</h3>
+            <p>Now, it's not always necessary to reinvent the wheel. Rather than building models from scratch, it makes much more sense to use already-made packages as this will save time and probably perform better. Below I'll be running two classification models through the sci-kit learn package. In interest of adding value rather than just showing I can use a package, I also go over the main mathematical function at work</p>
+
+            <h3>kNN</h3>
+            <p>As you can see below, the ski-kit learn package allows us to achieve better results in just 3 lines of code. First we set an instance of the function, then we fit, then we get the accuracy of our model. This is already a 3% improvement from our model.</p>
+
+            <div class="content-image">
+                <img src="images/kNN code.png" alt="kNN code">
+            </div>
+
+            <p>The concept behind kNN is this: depending on the value of k, the model will select the k most similar samples to the sample being classified. Based on the k samples selected, the classification will be based on whichever class has the highest proportion out of the k samples. In the equation below, the function is calculating the probability that sample y belongs to class j. On the right side, it's taking the sum of instances of class j among the k samples and calculating the proportion of the k samples. This is done for each class j and the class with the max proportion is the class that the model selects.</p>
+
+            <div class="content-image">
+                <img src="images/kNN equation.png" alt="kNN equation">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/miguelangelmoreno7/" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/angelxmoreno7" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:angel.moreno@trustedtechteam.com" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="copyright">&copy; Angel Moreno 2024</p>
+    </footer>
+</body>
 </html>

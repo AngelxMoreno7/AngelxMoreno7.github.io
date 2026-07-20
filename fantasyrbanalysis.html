@@ -1,72 +1,270 @@
-<!DOCTYPE HTML>
-<!--
-	Stellar by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Fantasy RB Analysis</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy RB Analysis - Is the Running Back Position Losing Value?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1e40af;
+            --slate-dark: #0f172a;
+            --slate-light: #1e293b;
+            --slate-lighter: #334155;
+        }
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-				<!-- Header -->
-					<header id="header">
-						<h1>Exploratory Analysis</h1>
-					</header>
+        html {
+            scroll-behavior: smooth;
+        }
 
-				<!-- Main -->
-					<div id="main">
+        body {
+            background: linear-gradient(135deg, var(--slate-dark) 0%, #1a2f4d 100%);
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
 
-						<!-- Content -->
-							<section id="content" class="main">
-								<span class="image main"><img src="images/Zamir-White-Raiders-1024x683.png" alt="" /></span>
-								<p>Date: 10/06/22</p>
-                                <h1>Is the Running Back position losing value in the NFL and Fantasy Football?</h1>
-                                <h3> Background </h3>
-								<p>Fantasy Football is an increasingly popular form of friendly competition where groups of friends select NFL players in a snake-draft format and face off against each other each week for bragging rights and maybe even a jackpot prize. Participants in a fantasy football league are called Fantasy General Managers (GMs) and each week a GM’s selected NFL players earn them points based on their performance statistics in that weeks game: A touchdown will earn that player (and the GM) 6 points, every 10 yards earned by a player in-game earns the GM 1 point, etc. A GM’s goal is to score more points than their paired opponent each week and eventually win the championship. The relevant player positions in Fantasy Football are Quarterbacks (QBs), Wide Receivers (WRs), Running Backs (RBs), and Tight Ends (TEs). GMs must have 1 QB, 2-3 RBs, 2-3 WRs, and 1 TE on their team. A few details have been omitted, but this should cover the background required to understand the analysis. </p>
-								<h3> Body </h3>
-                                <p>It's no secret that the National Football league is constantly changing, as coaches and general managers must do their best to be a step ahead of their competition. In recent years, teams have been passing the football much more often than they did in the past. The spread formation is becoming standard, running backs are being paid less, and the fullback position is just about extinct. This evolution of the game is being noticed in Fantasy Football as well: Fantasy GMs have coveted Running Backs with respectable statistics in recent years because the general consensus is that they’re becoming increasingly scarce. In fact, this has gone so far that a new trend has emerged that has caused Fantasy GMs to shift perspective. They are no longer valuing running backs as highly because valuable Running Backs are no longer scarce, they’re nonexistent. At least, so they say. This analysis investigates the previous claim. Is the Running Back position diminishing in value as a whole?</p>
-								<p>The dataset used for this analysis was acquired from github, a repository by fantasydatapros containing many different datasets related to yearly NFL Fantasy statistics. Specifically, the dataset used for this analysis was the result of appending 10 datasets that each contain Player names, positions, age, performance statistics, and of course, fantasy points for a specific year. Observations begin in 2012 and contain up to the 2021 season. This dataframe contains 6,286 rows and 21 columns, however, we filter this dataframe to only include players who score over 180 fantasy points in one season. This is because players who score less points in a given season are not considered to be relevant and are not usually selected by fantasy GMs. Here we are most interested in position, positional mean/median fantasy points scored, and year as we are tracking chronological data. </p>
-                                <p>As we begin our analysis, we’d like to track the performance of the running back position as a whole throughout the years. To do so, we take the median points scored for the position as a whole and plot it for each year. We also include other positions to verify whether any positional trends are isolated or part of a league-wide trend</p>
-                                <span class = "image main"> <img src="images/FANTASY RBs Line GRAPH.png" alt=""/> </span>
-                                <p>Here we see that the median points scored among running backs oscillates mildly from 2012 to 2018, but then we see a constant drop year after year. It’s possible that this is part of the oscillating pattern, but we must not be careful not to extrapolate. The 2022 season will be very telling. We also see that wide receivers experienced a similar recession in points, possibly a league-wide trend due to the covid pandemic, but the wide receiver position was still able to recover quite well in the following season. Unsurprisingly, the quarterback position is miles above as they are involved in every offensive play. </p>
-                                <p>While the last graphic was very intuitive, we can still miss out on important context when focusing on just one summary statistic such as the median. Because wide receivers are very comparable to running backs points-wise in the last graphic, we will now directly compare the two in terms of total fantasy points scored. The following bar graph counts the total number of players that exceeded 180 points within a given year and compares the proportion of those players that are running backs and wide receivers. If running backs are indeed diminishing in performance and abundance, then we should expect wide receivers to consume more and more of this proportion as time progresses.</p>
-                                <span class = "image main"> <img src="images/FANTASY RBS BAR GRAPH.png" alt=""/> </span>
-                                <p>However, we don’t exactly get the results we were expecting. Wide receivers may hold the majority of relevant players in most years, but the data suggests a major shift in during the 2020 and 2021 seasons. These results support the claim that running backs are less valuable in general (for most years), but we were specifically looking for a regression for the running back position in recent years. The data suggests the opposite here. </p>
-                                <p>After analysis, our findings are inconclusive. We saw a glimpse of the suspected downward trend for the running back position in our line graph, but were surprised to find an opposing trend from our bar graph. It could be that the regression of the running back position is a myth, or it could be that we’re currently witnessing the change and must allow more time to pass to receive any concrete evidence.</p>
-							</section>
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            z-index: 50;
+            padding: 1rem 2rem;
+        }
 
-					</div>
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 6xl;
+            margin: 0 auto;
+        }
 
-				<!-- Footer -->
-				<footer id="footer">
-					<section>
-						<ul class="icons">
-							<li><a href="https://www.linkedin.com/in/miguelangelmoreno7/" target="_blank" class="icon brands fa-linkedin alt"><span class="label">Twitter</span></a></li>
-							<li><a href="https://github.com/angelxmoreno7" target="_blank" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
-						</ul>
-					</section>
-					<p class="copyright">&copy; Angel Moreno 2024</p>
-				</footer>
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
 
-			</div>
+        header a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+        header a:hover {
+            color: var(--primary);
+        }
 
-	</body>
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .project-header {
+            margin-bottom: 3rem;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-date {
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .main-image {
+            width: 100%;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .project-content {
+            line-height: 1.8;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .project-content h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .project-content p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .content-image {
+            width: 100%;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .content-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Angel Moreno</a>
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+        <div class="project-header">
+            <p class="project-date">Date: 10/06/22</p>
+            <h1>Is the Running Back Position Losing Value in the NFL and Fantasy Football?</h1>
+        </div>
+
+        <div class="main-image">
+            <img src="images/Zamir-White-Raiders-1024x683.png" alt="NFL Running Back">
+        </div>
+
+        <div class="project-content">
+            <h3>Background</h3>
+            <p>Fantasy Football is an increasingly popular form of friendly competition where groups of friends select NFL players in a snake-draft format and face off against each other each week for bragging rights and maybe even a jackpot prize. Participants in a fantasy football league are called Fantasy General Managers (GMs) and each week a GM's selected NFL players earn them points based on their performance statistics in that weeks game: A touchdown will earn that player (and the GM) 6 points, every 10 yards earned by a player in-game earns the GM 1 point, etc. A GM's goal is to score more points than their paired opponent each week and eventually win the championship. The relevant player positions in Fantasy Football are Quarterbacks (QBs), Wide Receivers (WRs), Running Backs (RBs), and Tight Ends (TEs). GMs must have 1 QB, 2-3 RBs, 2-3 WRs, and 1 TE on their team. A few details have been omitted, but this should cover the background required to understand the analysis.</p>
+
+            <h3>Body</h3>
+            <p>It's no secret that the National Football league is constantly changing, as coaches and general managers must do their best to be a step ahead of their competition. In recent years, teams have been passing the football much more often than they did in the past. The spread formation is becoming standard, running backs are being paid less, and the fullback position is just about extinct. This evolution of the game is being noticed in Fantasy Football as well: Fantasy GMs have coveted Running Backs with respectable statistics in recent years because the general consensus is that they're becoming increasingly scarce. In fact, this has gone so far that a new trend has emerged that has caused Fantasy GMs to shift perspective. They are no longer valuing running backs as highly because valuable Running Backs are no longer scarce, they're nonexistent. At least, so they say. This analysis investigates the previous claim. Is the Running Back position diminishing in value as a whole?</p>
+
+            <p>The dataset used for this analysis was acquired from github, a repository by fantasydatapros containing many different datasets related to yearly NFL Fantasy statistics. Specifically, the dataset used for this analysis was the result of appending 10 datasets that each contain Player names, positions, age, performance statistics, and of course, fantasy points for a specific year. Observations begin in 2012 and contain up to the 2021 season. This dataframe contains 6,286 rows and 21 columns, however, we filter this dataframe to only include players who score over 180 fantasy points in one season. This is because players who score less points in a given season are not considered to be relevant and are not usually selected by fantasy GMs. Here we are most interested in position, positional mean/median fantasy points scored, and year as we are tracking chronological data.</p>
+
+            <p>As we begin our analysis, we'd like to track the performance of the running back position as a whole throughout the years. To do so, we take the median points scored for the position as a whole and plot it for each year. We also include other positions to verify whether any positional trends are isolated or part of a league-wide trend</p>
+
+            <div class="content-image">
+                <img src="images/FANTASY RBs Line GRAPH.png" alt="Running backs median points over time">
+            </div>
+
+            <p>Here we see that the median points scored among running backs oscillates mildly from 2012 to 2018, but then we see a constant drop year after year. It's possible that this is part of the oscillating pattern, but we must not be careful not to extrapolate. The 2022 season will be very telling. We also see that wide receivers experienced a similar recession in points, possibly a league-wide trend due to the covid pandemic, but the wide receiver position was still able to recover quite well in the following season. Unsurprisingly, the quarterback position is miles above as they are involved in every offensive play.</p>
+
+            <p>While the last graphic was very intuitive, we can still miss out on important context when focusing on just one summary statistic such as the median. Because wide receivers are very comparable to running backs points-wise in the last graphic, we will now directly compare the two in terms of total fantasy points scored. The following bar graph counts the total number of players that exceeded 180 points within a given year and compares the proportion of those players that are running backs and wide receivers. If running backs are indeed diminishing in performance and abundance, then we should expect wide receivers to consume more and more of this proportion as time progresses.</p>
+
+            <div class="content-image">
+                <img src="images/FANTASY RBS BAR GRAPH.png" alt="Running backs vs wide receivers comparison">
+            </div>
+
+            <p>However, we don't exactly get the results we were expecting. Wide receivers may hold the majority of relevant players in most years, but the data suggests a major shift in during the 2020 and 2021 seasons. These results support the claim that running backs are less valuable in general (for most years), but we were specifically looking for a regression for the running back position in recent years. The data suggests the opposite here.</p>
+
+            <p>After analysis, our findings are inconclusive. We saw a glimpse of the suspected downward trend for the running back position in our line graph, but were surprised to find an opposing trend from our bar graph. It could be that the regression of the running back position is a myth, or it could be that we're currently witnessing the change and must allow more time to pass to receive any concrete evidence.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/miguelangelmoreno7/" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/angelxmoreno7" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:angel.moreno@trustedtechteam.com" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="copyright">&copy; Angel Moreno 2024</p>
+    </footer>
+</body>
 </html>

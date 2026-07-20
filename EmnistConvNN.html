@@ -1,77 +1,289 @@
-<!DOCTYPE HTML>
-<!--
-	Stellar by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>eMNIST Convolutional NN</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Networks with eMNIST Dataset</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1e40af;
+            --slate-dark: #0f172a;
+            --slate-light: #1e293b;
+            --slate-lighter: #334155;
+        }
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-				<!-- Header -->
-					<header id="header">
-						<h1>Statistical Modeling</h1>
-					</header>
+        html {
+            scroll-behavior: smooth;
+        }
 
-				<!-- Main -->
-					<div id="main">
+        body {
+            background: linear-gradient(135deg, var(--slate-dark) 0%, #1a2f4d 100%);
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
 
-						<!-- Content -->
-							<section id="content" class="main">
-								<span class="image main"><img src="images/handwriting-cropped.png" alt="" /></span>
-								<p>Date: 5/12/23</p>
-                                <h1>Convolutional Neural Network on eMNIST Dataset</h1>
-                                <h3> Introduction </h3>
-								<span class = "image right"> <img src="images/eMNIST examples.png" alt=""/> </span>
-								<p>This dataset served as my introduction to the use of convolutional neural networks.  </p>
-                                <p>The MNIST dataset contains grey-scale, low-resolution images of hand-written letters. There are 26 categories as there are 26 letters in the alphabet, some examples are shown to the right. In this form it’s easy for us to see, but on the backend the images are structured in a way where each pixel within the image is represented as a digit between 0 and 255. The lower the digit, the darker that pixel is and vice versa.</p>
-								<h3>Goal</h3>
-								<p>With this dataset, the goal here is to create a model that will be able to take any of these images and correctly classify which letter it is.  </p>
-                                <h3>Preparation</h3>
-								<p>Neural networks almost always require that the input is received in a specific form. In most cases, it’s necessary to alter images such that all images are the same size etc. but the MNIST images luckily are already all have dimensions of 28 x 28. All that’s left to do is separate our dataset into 3 subsets: training data, validation data, and testing data.</p>
-                                <p>Before I began using a convolutional neural network, I first created a traditional feed-forward NN. This was important because I needed something to compare my final model to. If my final model isn’t any better than a more simple NN then why bother using a convolutional NN?</p>
-								<h3>Convolutional Neural Network (CNN)</h3>
-                                <p>In order to implement both my regular neural network and my convolutional neural network, I used the Keras API with computing power provided by Google Colab. I’ll spare the details regarding my first models, but my first NN resulted in 70% accuracy which I then improved to 85% accuracy by adding dropout. That is, my first model was able to correctly classify 70% of our test images and was improved to 81% after some improvements were made. </p>
-                                <p>After setting my baseline, I began trying my hand at a convolutional NN. Below you’ll find the code where I structured my final convolutional NN. As you can see, this Convolutional NN was structured with many convolutional layers, max pooling layers, and activation functions. The final layer has 26 units and uses the softmax activation function. This is critical because what our model is doing is taking an image and outputting 26 different percentages, one for each letter. These percentages are interpreted as the probability that the image represents that specific letter. Our model then takes the maximum percentage and classifies the image as that letter. </p>
-                                <span class = "image main"> <img src="images/EMNIST CODE CNN.png" alt=""/> </span>
-                                <p>Now, let’s not get ahead of ourselves. All we’ve done so far is set the structure of our model, we haven’t actually trained it! Next I compile our model, which is where I set our loss function and which metric I’d like to track (I chose accuracy)</p>
-                                <p>Finally, I fit the model. On the backend, our model is classifying the images in our training dataset, getting the results of its classification, making adjustments, and repeating the process. I create the object “history” to store our loss and accuracy through each iteration of the previously mentioned process. After fitting, we can see a plot of our loss and accuracy as the training took place. </p>
-								<span class = "image main"> <img src="images/TRAINING VALIDATION EMNIST.png" alt=""/> </span>
-								<p>Looking at the plot, we see that the loss value and the accuracy drop and increase significantly within the first four epochs (iterations). From there, our accuracy and loss gradually improve. Finally, we have our accuracy on the CNN model. We achieved 91% accuracy!</p>
-							</section>
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            z-index: 50;
+            padding: 1rem 2rem;
+        }
 
-					</div>
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 6xl;
+            margin: 0 auto;
+        }
 
-				<!-- Footer -->
-				<footer id="footer">
-					<section>
-						<ul class="icons">
-							<li><a href="https://www.linkedin.com/in/miguelangelmoreno7/" target="_blank" class="icon brands fa-linkedin alt"><span class="label">Twitter</span></a></li>
-							<li><a href="https://github.com/angelxmoreno7" target="_blank" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
-						</ul>
-					</section>
-					<p class="copyright">&copy; Angel Moreno 2024</p>
-				</footer>
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
 
-			</div>
+        header a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+        header a:hover {
+            color: var(--primary);
+        }
 
-	</body>
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .project-header {
+            margin-bottom: 3rem;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-date {
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .main-image {
+            width: 100%;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .project-content {
+            line-height: 1.8;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .project-content h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .project-content p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .content-image {
+            width: 100%;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .content-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-right {
+            float: right;
+            max-width: 45%;
+            margin: 0 0 1.5rem 1.5rem;
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .image-right {
+                float: none;
+                max-width: 100%;
+                margin: 1rem 0;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Angel Moreno</a>
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+        <div class="project-header">
+            <p class="project-date">Date: 5/12/23</p>
+            <h1>Convolutional Neural Network on eMNIST Dataset</h1>
+        </div>
+
+        <div class="main-image">
+            <img src="images/handwriting-cropped.png" alt="Handwriting samples">
+        </div>
+
+        <div class="project-content">
+            <h3>Introduction</h3>
+            <div style="overflow: auto;">
+                <div class="content-image image-right">
+                    <img src="images/eMNIST examples.png" alt="eMNIST examples">
+                </div>
+                <p>This dataset served as my introduction to the use of convolutional neural networks.</p>
+                <p>The MNIST dataset contains grey-scale, low-resolution images of hand-written letters. There are 26 categories as there are 26 letters in the alphabet, some examples are shown to the right. In this form it's easy for us to see, but on the backend the images are structured in a way where each pixel within the image is represented as a digit between 0 and 255. The lower the digit, the darker that pixel is and vice versa.</p>
+            </div>
+
+            <h3>Goal</h3>
+            <p>With this dataset, the goal here is to create a model that will be able to take any of these images and correctly classify which letter it is.</p>
+
+            <h3>Preparation</h3>
+            <p>Neural networks almost always require that the input is received in a specific form. In most cases, it's necessary to alter images such that all images are the same size etc. but the MNIST images luckily are already all have dimensions of 28 x 28. All that's left to do is separate our dataset into 3 subsets: training data, validation data, and testing data.</p>
+            <p>Before I began using a convolutional neural network, I first created a traditional feed-forward NN. This was important because I needed something to compare my final model to. If my final model isn't any better than a more simple NN then why bother using a convolutional NN?</p>
+
+            <h3>Convolutional Neural Network (CNN)</h3>
+            <p>In order to implement both my regular neural network and my convolutional neural network, I used the Keras API with computing power provided by Google Colab. I'll spare the details regarding my first models, but my first NN resulted in 70% accuracy which I then improved to 85% accuracy by adding dropout. That is, my first model was able to correctly classify 70% of our test images and was improved to 81% after some improvements were made.</p>
+            <p>After setting my baseline, I began trying my hand at a convolutional NN. Below you'll find the code where I structured my final convolutional NN. As you can see, this Convolutional NN was structured with many convolutional layers, max pooling layers, and activation functions. The final layer has 26 units and uses the softmax activation function. This is critical because what our model is doing is taking an image and outputting 26 different percentages, one for each letter. These percentages are interpreted as the probability that the image represents that specific letter. Our model then takes the maximum percentage and classifies the image as that letter.</p>
+
+            <div class="content-image">
+                <img src="images/EMNIST CODE CNN.png" alt="CNN code structure">
+            </div>
+
+            <p>Now, let's not get ahead of ourselves. All we've done so far is set the structure of our model, we haven't actually trained it! Next I compile our model, which is where I set our loss function and which metric I'd like to track (I chose accuracy)</p>
+            <p>Finally, I fit the model. On the backend, our model is classifying the images in our training dataset, getting the results of its classification, making adjustments, and repeating the process. I create the object "history" to store our loss and accuracy through each iteration of the previously mentioned process. After fitting, we can see a plot of our loss and accuracy as the training took place.</p>
+
+            <div class="content-image">
+                <img src="images/TRAINING VALIDATION EMNIST.png" alt="Training and validation results">
+            </div>
+
+            <p>Looking at the plot, we see that the loss value and the accuracy drop and increase significantly within the first four epochs (iterations). From there, our accuracy and loss gradually improve. Finally, we have our accuracy on the CNN model. We achieved 91% accuracy!</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/miguelangelmoreno7/" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/angelxmoreno7" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:angel.moreno@trustedtechteam.com" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="copyright">&copy; Angel Moreno 2024</p>
+    </footer>
+</body>
 </html>
