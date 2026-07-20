@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Quality Scoring Model - XGBoost</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1e40af;
+            --slate-dark: #0f172a;
+            --slate-light: #1e293b;
+            --slate-lighter: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--slate-dark) 0%, #1a2f4d 100%);
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            z-index: 50;
+            padding: 1rem 2rem;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 6xl;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        header a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        header a:hover {
+            color: var(--primary);
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .project-header {
+            margin-bottom: 3rem;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-date {
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .main-image {
+            width: 100%;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .project-content {
+            line-height: 1.8;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .project-content h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .project-content p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 0.5rem;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .content-image {
+            width: 100%;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .content-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Angel Moreno</a>
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+        <div class="project-header">
+            <p class="project-date">Production ML System</p>
+            <h1>Lead Quality Scoring Model</h1>
+        </div>
+
+        <div class="main-image">
+            <img src="images/lead_grading_meeting_booking_rate_year_over_year.png" alt="Lead grading model impact - meeting booking rates YoY">
+        </div>
+
+        <div class="project-content">
+            <h3>Problem Statement</h3>
+            <p>Sales teams operating at scale face a critical challenge: with hundreds of thousands of potential leads available monthly, they must prioritize which leads to pursue. Traditional lead qualification methods are manual and inconsistent, resulting in significant time waste on low-quality leads and missed opportunities on high-potential prospects.</p>
+            <p>The goal was to build an automated, data-driven system that could intelligently grade incoming leads in real-time, enabling sales representatives to focus their limited calling capacity on the highest-quality opportunities.</p>
+
+            <h3>Solution Overview</h3>
+            <p>I developed a two-stage machine learning pipeline that predicts lead quality through sequential probability estimates:</p>
+            <ul style="color: #cbd5e1; margin-bottom: 1rem; margin-left: 1.5rem;">
+                <li><strong style="color: var(--primary);">Stage 1 - Answer Probability:</strong> Predicts the likelihood a lead will answer the phone and allow a pitch</li>
+                <li><strong style="color: var(--primary);">Stage 2 - Meeting Probability:</strong> Given a successful pitch, predicts the probability of booking a meeting with an account executive</li>
+            </ul>
+            <p>A final composite scoring formula combines both model outputs with optimized weights, producing a single lead quality score that's synced to Salesforce for real-time access by the sales team.</p>
+
+            <h3>Technical Approach</h3>
+            <p><strong>Feature Engineering (230 Features):</strong> Extracted signal from noisy, unstructured data fields including job titles, education backgrounds, and organizational attributes from ZoomInfo. Key techniques included:</p>
+            <ul style="color: #cbd5e1; margin-bottom: 1rem; margin-left: 1.5rem;">
+                <li>Domain-aware signal extraction (IT relationship indicators, leadership level classification)</li>
+                <li>Tokenization and multi-hot encoding of multi-valued fields (industries, company regions)</li>
+                <li>Intelligent handling of missing/malformed data (education level standardization)</li>
+            </ul>
+
+            <p><strong>Model & Optimization:</strong> Built XGBoost models with strategic calibration to optimize for precision over recall. This design choice recognizes that sales teams are capacity-constrained—it's better to identify fewer high-confidence leads than to flood teams with marginal prospects.</p>
+
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">80%</div>
+                    <div class="metric-label">Precision</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">230+</div>
+                    <div class="metric-label">Engineered Features</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">8,312</div>
+                    <div class="metric-label">Leads/Month Graded</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">50-100%</div>
+                    <div class="metric-label">YoY Improvement</div>
+                </div>
+            </div>
+
+            <p><strong>Hyperparameter Tuning:</strong> Executed 3 rounds of grid search, progressively narrowing the search space across key parameters: column_sample_by_tree, learning_rate, max_depth, n_estimators, and subsample_size.</p>
+
+            <p><strong>Production Deployment:</strong> Scheduled Azure ML Studio job running nightly that processes incoming leads through the full pipeline (data processing → feature engineering → scoring) and exports results directly to Salesforce. Built-in monitoring tracks model performance metrics with automated alerts if precision, recall, or F1 degrade by more than 5%.</p>
+
+            <h3>Technical Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">Python</span>
+                <span class="tech-badge">XGBoost</span>
+                <span class="tech-badge">Scikit-learn</span>
+                <span class="tech-badge">Pandas</span>
+                <span class="tech-badge">Azure ML Studio</span>
+                <span class="tech-badge">Salesforce API</span>
+                <span class="tech-badge">SQL</span>
+                <span class="tech-badge">Feature Engineering</span>
+            </div>
+
+            <h3>Business Impact</h3>
+            <p>The model delivered measurable improvements in sales team productivity and lead conversion:</p>
+            <ul style="color: #cbd5e1; margin-bottom: 1rem; margin-left: 1.5rem;">
+                <li><strong style="color: var(--primary);">50-100% YoY improvement</strong> in meeting booking rates across months (visible in the chart above)</li>
+                <li><strong style="color: var(--primary);">Better lead quality:</strong> Sales reps now spend time on leads with significantly higher propensity to engage</li>
+                <li><strong style="color: var(--primary);">Operational efficiency:</strong> Automated nightly grading eliminates manual lead qualification bottlenecks</li>
+                <li><strong style="color: var(--primary);">Scalability:</strong> System handles 8,300+ new leads monthly with consistent performance</li>
+            </ul>
+
+            <h3>Key Learnings</h3>
+            <p>This project reinforced several critical ML practices:</p>
+            <ul style="color: #cbd5e1; margin-bottom: 1rem; margin-left: 1.5rem;">
+                <li><strong style="color: var(--primary);">Strategic metric optimization:</strong> Precision wasn't chosen arbitrarily—it was optimized for our specific business constraint (limited sales capacity)</li>
+                <li><strong style="color: var(--primary);">Feature engineering as a force multiplier:</strong> The 230 engineered features extracted from unstructured data were more valuable than base features alone</li>
+                <li><strong style="color: var(--primary);">Production-first thinking:</strong> Model monitoring, retraining schedules, and alerting were built in from day one, not added later</li>
+                <li><strong style="color: var(--primary);">Cross-functional collaboration:</strong> Success required ongoing feedback from sales leadership to validate the model's business impact</li>
+            </ul>
+
+            <h3>End-to-End Ownership</h3>
+            <p>This was a solo project executed over 4 months (at ~50% allocation alongside other responsibilities). I owned every aspect: problem scoping, data exploration, feature engineering, model development, hyperparameter optimization, production deployment, and ongoing monitoring. This end-to-end ownership demonstrates the ability to take a business problem from definition through successful production deployment.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/miguelangelmoreno7/" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/angelxmoreno7" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:angel.moreno@trustedtechteam.com" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="copyright">&copy; Angel Moreno 2024</p>
+    </footer>
+</body>
+</html>
