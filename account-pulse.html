@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Pulse - Explainable Churn-Risk Scoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1e40af;
+            --slate-dark: #0f172a;
+            --slate-light: #1e293b;
+            --slate-lighter: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--slate-dark) 0%, #1a2f4d 100%);
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            z-index: 50;
+            padding: 1rem 2rem;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 6xl;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        header a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        header a:hover {
+            color: var(--primary);
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .project-header {
+            margin-bottom: 3rem;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-date {
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .main-image {
+            width: 100%;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .project-content {
+            line-height: 1.8;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .project-content h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .project-content p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .project-content ul {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+            margin-left: 1.5rem;
+        }
+
+        .project-content ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .project-content strong.accent {
+            color: var(--primary);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 0.5rem;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        figure.content-image {
+            width: 100%;
+            margin: 1.5rem 0;
+        }
+
+        figure.content-image .frame {
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        figure.content-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        figure.content-image figcaption {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 0.6rem;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .callout {
+            background: rgba(59, 130, 246, 0.08);
+            border-left: 3px solid var(--primary);
+            border-radius: 0.5rem;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .callout p {
+            margin-bottom: 0.5rem;
+        }
+
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: gap 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Angel Moreno</a>
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+        <div class="project-header">
+            <p class="project-date">Date: 9/1/26</p>
+            <h1>Account Pulse &mdash; Explainable Churn-Risk Scoring</h1>
+        </div>
+
+        <div class="main-image">
+            <img src="images/account_pulse_health_modal.png" alt="Account Pulse health-score modal showing an account's health score, risk level, and plain-language analysis inside Salesforce">
+        </div>
+
+        <div class="project-content">
+            <h3>Problem Statement</h3>
+            <p>Account Managers are responsible for retaining a large book of business, but they had no consistent, forward-looking way to know <em>which</em> accounts were drifting toward churn &mdash; and, just as importantly, <em>why</em>. Retention decisions leaned on gut feel and lagging indicators that only surfaced a problem once a renewal was already in jeopardy.</p>
+            <p>The goal was to build a system that scores every active account's churn risk each month, translates that score into a health metric an AM can read at a glance, and &mdash; the hard part &mdash; explains each score in plain language they can actually act on, delivered directly inside the tools they already use (Salesforce and Confluence). A black-box risk number that nobody trusts is worse than no number at all.</p>
+
+            <h3>Solution Overview</h3>
+            <p>Account Pulse is an end-to-end ML system that runs monthly on Azure ML. It trains, evaluates, and deploys an XGBoost classifier that flags accounts at high risk of offboarding, then inverts that probability into an intuitive <strong class="accent">health score</strong> (100 = healthiest). Every score ships with an explanation: the model's top drivers for that specific account, narrated by an LLM, written back to Salesforce for the AM to see.</p>
+            <p>The monthly inference pipeline is three chained components:</p>
+            <ul>
+                <li><strong class="accent">Feature engineering:</strong> queries the data warehouse and Salesforce to build a monthly snapshot dataset &mdash; one row per account per month &mdash; combining subscription/revenue metrics, support-case sentiment, AM engagement, and firmographic data.</li>
+                <li><strong class="accent">Scoring:</strong> loads the registered model, filters to the current month's active accounts, reindexes features exactly as trained, predicts churn probability, and syncs each score to Salesforce.</li>
+                <li><strong class="accent">Explanation:</strong> computes SHAP feature attributions, selects the top drivers per account, routes them through a narrative layer plus an LLM, and writes structured explanation JSON back to Salesforce (and an audit archive in blob storage).</li>
+            </ul>
+
+            <figure class="content-image">
+                <div class="frame">
+                    <img src="images/account_pulse_health_modal.png" alt="Health-score modal: current health percentage, risk band, health-score analysis, and a recommended next step">
+                </div>
+                <figcaption>The health-score modal an Account Manager sees in Salesforce &mdash; score, risk band, a plain-language analysis, and a recommended next step.</figcaption>
+            </figure>
+
+            <h3>Explainability &mdash; the core of the project</h3>
+            <p>The differentiator here isn't the classifier &mdash; it's making the classifier's reasoning trustworthy to a non-technical audience. Every account's score is decomposed into the individual factors that moved it, using <strong class="accent">XGBoost's native TreeSHAP</strong> (computed directly from the booster, which sidesteps a serialization incompatibility in the standard SHAP library). Each factor is rendered from a feature dictionary into a human sentence &mdash; "Account has been a customer for 35 months" rather than a raw column name and value &mdash; and grouped into intuitive categories like Support Load, Engagement, and Renewal Risk.</p>
+
+            <figure class="content-image">
+                <div class="frame">
+                    <img src="images/account_pulse_risk_signals.png" alt="Risk-signals view grouping an account's drivers into categories such as Support Load, Engagement, Renewal Risk, and Revenue Trajectory">
+                </div>
+                <figcaption>Drivers grouped into plain-language categories, ordered by their relative influence on the account's score.</figcaption>
+            </figure>
+
+            <figure class="content-image">
+                <div class="frame">
+                    <img src="images/account_pulse_support_load_drivers.png" alt="Expanded driver breakdown showing individual signals with color-coded bars indicating whether each improves or worsens the health score">
+                </div>
+                <figcaption>Expanding a category reveals its individual signals, each labeled by direction and magnitude of impact on the health score.</figcaption>
+            </figure>
+
+            <h3>The Account Health Guide (Confluence)</h3>
+            <p>Beyond the per-account modal, I built a standalone flow that publishes a plain-language reference guide to Confluence &mdash; one page per data point, each with a friendly name, description, and an influence scatterplot rendered in matplotlib. The charts show how a feature's value relates to its influence on predicted risk across the whole population, so an AM can understand a driver in general before seeing it on a specific account.</p>
+
+            <figure class="content-image">
+                <div class="frame">
+                    <img src="images/account_pulse_shap_influence_scatterplot.png" alt="Influence scatterplot for a data point: feature value on the x-axis, influence on predicted churn risk on the y-axis, with a typical-influence trend line and a separate data-unavailable panel">
+                </div>
+                <figcaption>An influence scatterplot from the guide: each dot is an account, colored by whether the data point raised (red) or lowered (green) its predicted risk, with a trend line for the typical influence at each value.</figcaption>
+            </figure>
+
+            <figure class="content-image">
+                <div class="frame">
+                    <img src="images/account_pulse_confluence_guide.png" alt="Confluence guide page for a data point, describing what it means and the model's overall tendency in plain language">
+                </div>
+                <figcaption>Each data point gets a Confluence page: what it means, the model's overall tendency, and a "tendency, not a rule" caveat explaining why an individual account can differ.</figcaption>
+            </figure>
+
+            <p>The publisher self-corrects on retrain (the "Model tendency" sentences are derived from the same SHAP data, never hardcoded) and is gated by a content fingerprint &mdash; the model version plus a hash of the feature definitions &mdash; so routine monthly re-scoring is a no-op and the guide only republishes when something that actually changes its meaning changes.</p>
+
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">4,400+</div>
+                    <div class="metric-label">Accounts Scored Monthly</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">3-Stage</div>
+                    <div class="metric-label">Azure ML Pipeline</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">Top 5</div>
+                    <div class="metric-label">Explained Drivers / Account</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">6-Month</div>
+                    <div class="metric-label">Churn Horizon</div>
+                </div>
+            </div>
+
+            <h3>Technical Approach</h3>
+            <p><strong class="accent">Label engineering &amp; data hygiene:</strong> The target is whether an account offboards within 6 months of a given snapshot month. Getting the label right was one of the hardest parts of the project. Of 2,600+ accounts with an offboarded date in Salesforce, nearly 2,000 carried misleading dates &mdash; 1,694 shared a single migration-artifact date &mdash; leaving only ~600 usable positive accounts. I anchored each account's timeline to its true customer-start (earliest closed-won opportunity, falling back to billing history) rather than record-creation date, which had been generating mislabeled rows from pre-customer months, and added a customer-evidence filter so accounts with no real history are neither trained on nor scored (no score beats a fabricated one).</p>
+            <p><strong class="accent">Leakage auditing:</strong> Because positive labels are event-confirmed while negatives require a matured 6-month window, the most recent snapshots skew positive &mdash; giving the model subtle "looks recent &rarr; churny" channels. I built audits to catch these (e.g. an intent feature that only covered still-active accounts effectively encoded "account still exists today") and enforce a group-aware train/test split on account ID so near-identical monthly rows for the same account can't leak across the split and inflate metrics.</p>
+            <p><strong class="accent">Case-sentiment enrichment:</strong> Support-case features draw on an upstream LLM enrichment job that classifies closed cases (sentiment, trajectory, severity, resolution type) into a search index, which the feature pipeline joins in per account.</p>
+            <p><strong class="accent">LLM-narrated explanations:</strong> The top drivers per account are handed to Gemini, which writes a constrained-JSON 2&ndash;3 sentence summary plus a recommended next step. Calls run parallelized; a full population run completes in roughly 1.5&ndash;2 hours. The API path is pinned to a paid tier specifically so customer account data is excluded from any model-improvement or human review.</p>
+            <p><strong class="accent">Diagnostics tooling:</strong> I wrote a suite of local SHAP tools &mdash; per-account driver tables, population dependence plots, exact pairwise interaction decomposition, and a reusable feature data-quality audit &mdash; so any surprising driver can be traced from the UI back through the model to the source data.</p>
+
+            <h3>Technical Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">Python</span>
+                <span class="tech-badge">XGBoost</span>
+                <span class="tech-badge">SHAP (TreeSHAP)</span>
+                <span class="tech-badge">Azure ML Studio</span>
+                <span class="tech-badge">Salesforce API</span>
+                <span class="tech-badge">Gemini / LLM</span>
+                <span class="tech-badge">SQL</span>
+                <span class="tech-badge">Pandas</span>
+                <span class="tech-badge">Matplotlib</span>
+                <span class="tech-badge">Confluence API</span>
+                <span class="tech-badge">MLflow</span>
+            </div>
+
+            <h3>Business Impact</h3>
+            <ul>
+                <li><strong class="accent">Proactive retention:</strong> AMs get a monthly, forward-looking churn signal on every active account instead of reacting once a renewal is already at risk.</li>
+                <li><strong class="accent">Trust through transparency:</strong> Every score comes with account-specific reasons and a recommended next step, so the number drives action rather than skepticism.</li>
+                <li><strong class="accent">Delivered where they work:</strong> Scores and explanations land inside Salesforce, backed by a self-updating Confluence guide &mdash; no new tool to learn.</li>
+                <li><strong class="accent">Auditable by design:</strong> Persisted SHAP artifacts and diagnostic tooling mean any driver shown to an AM can be traced back to the data behind it.</li>
+            </ul>
+
+            <h3>Key Learnings</h3>
+            <ul>
+                <li><strong class="accent">Explainability is a product, not a footnote:</strong> the modeling was a fraction of the effort &mdash; making the output trustworthy and legible to non-technical users was the real work.</li>
+                <li><strong class="accent">Label hygiene can make or break a model:</strong> with a small positive class, migration artifacts and timeline-anchoring bugs quietly corrupt training data unless you audit relentlessly.</li>
+                <li><strong class="accent">Guard against leakage from time itself:</strong> asymmetric label maturity and feed-coverage changes create sneaky "recency" channels that inflate offline metrics without real predictive value.</li>
+            </ul>
+
+            <h3>End-to-End Ownership</h3>
+            <p>I own Account Pulse end to end: problem framing, warehouse and Salesforce data modeling, feature engineering, label design and data-hygiene audits, model training and leakage review, the SHAP explanation layer, the LLM narration, the Azure ML pipeline that runs it monthly, the Salesforce write-back, and the self-updating Confluence guide &mdash; plus the diagnostic tooling that keeps the whole thing debuggable.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/miguelangelmoreno7/" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://github.com/angelxmoreno7" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:angel.moreno@trustedtechteam.com" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="copyright">&copy; Angel Moreno 2024</p>
+    </footer>
+</body>
+</html>

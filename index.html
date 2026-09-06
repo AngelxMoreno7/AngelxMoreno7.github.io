@@ -553,6 +553,19 @@
         // Project configuration - easily add, remove, or update projects here
         const projectsUnsorted = [
           {
+            id: 0,
+            title: "Account Pulse — Explainable Churn-Risk Scoring",
+            description: "Built an end-to-end ML system that scores every active account's churn risk monthly and, crucially, explains each score in plain language for Account Managers. An XGBoost model runs as a 3-stage Azure ML pipeline; TreeSHAP attributions are narrated by an LLM and written back to Salesforce as a health score with per-account drivers, plus a self-updating Confluence guide with influence plots for every data point.",
+            image: "images/account_pulse_shap_scatterplot_thumb.png",
+            tags: ["XGBoost", "SHAP", "Azure ML Studio", "Explainable AI", "Salesforce", "LLM"],
+            link: "account-pulse.html",
+            date: "9/1/26",
+            metrics: {
+              metric: "Explainable AI",
+              value: "SHAP"
+            }
+          },
+          {
             id: 1,
             title: "Lead Quality Scoring Model",
             description: "Developed a two-stage XGBoost predictive model for enterprise lead grading that improved meeting booking rates by 50-100% year-over-year. Engineered 230 features from company and contact data, including advanced signal extraction from job titles and education backgrounds. Implemented precision-optimized calibration strategy prioritizing lead quality for high-volume calling environments. Deployed as automated Azure ML Studio pipeline running nightly, scoring 8,312+ leads monthly with Salesforce integration.",
